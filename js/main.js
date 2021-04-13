@@ -12,17 +12,35 @@ const dragged = {
     index: null,
 };
 
-setGame();
+let isPlaying = false;
+let timeInterval = null;
+let time = 0;
 
 //function
 function setGame(){
+    isPlaying = true;
     container.innerHTML = ''
+
+    timeInterval = setInterval(() => {
+        playTime.innerText = time;
+        time++
+    },1000)
+
     tiles = createImageTiles();
     tiles.forEach(tile => container.appendChild(tile))
     setTimeout(() => {
         container.innerHTML = ''
         shuffle(tiles).forEach(tile => container.appendChild(tile))
     },2000);
+}
+
+function checkStatus(){
+    const currentList = [...container.children]
+    const unMatchedList = currentList.filter((child, index) => Number(child.getAttribute('data-index')) !== index)
+    if(unMatchedList.length === 0){
+        gameText.style.display = 'block';
+        isPlaying = false;
+    }
 }
 
 function createImageTiles(){
@@ -47,8 +65,10 @@ function shuffle(array){
     return array;
 }
 
+
 //event
 container.addEventListener('dragstart', (event) => {
+    if(!isPlaying)return
     const obj = event.target
     dragged.el = obj;
     dragged.class = obj.className;
@@ -59,6 +79,7 @@ container.addEventListener('dragover', (event) => {
     event.preventDefault()
 })
 container.addEventListener('drop', (event) => {
+    if(!isPlaying)return
     const obj = event.target
 
     if(obj.className !== dragged.class){
@@ -77,4 +98,9 @@ container.addEventListener('drop', (event) => {
         dragged.index > droppedIndex ? obj.before(dragged.el) : obj.after(dragged.el)
         isLast ? originPlace.after(obj) : originPlace.before(obj)
     }
+    checkStatus
+})
+
+startButton.addEventListener('click', () => {
+    setGame();
 })
