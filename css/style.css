@@ -1,0 +1,27 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --facebook: #3b5998;
+}
+
+.wrap-all{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.play-time{
+    font-size: 3rem;
+    margin-top: 2rem;
+    color: let(--facebook);
+}
+
+ul{
+    margin-top: 1rem;
+    list-style: none;
+    border: 2px solid #3b5998;
+}
